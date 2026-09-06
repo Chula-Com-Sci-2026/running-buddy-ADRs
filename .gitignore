@@ -1,0 +1,17 @@
+# dependencies
+node_modules/
+__pycache__/
+.venv/
+
+# env & secrets
+.env
+*.local
+
+# build output
+dist/
+build/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
