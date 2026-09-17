@@ -7,6 +7,7 @@ point, and plan around the weather. Term project for **2110521 Software Architec
 
 - **Requirements:** [`docs/requirements.md`](docs/requirements.md) _(to be added)_
 - **Architecture Decision Records:** [`docs/adr/`](docs/adr/)
+- **Run Scheduling Service API (draft):** [`docs/api/run-scheduling.openapi.yaml`](docs/api/run-scheduling.openapi.yaml)
 - **Repo setup handoff:** [`docs/REPO-SETUP-HANDOFF.md`](docs/REPO-SETUP-HANDOFF.md)
 
 ## Architecture Decision Records (ADRs)

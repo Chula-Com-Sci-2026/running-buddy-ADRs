@@ -1,0 +1,352 @@
+openapi: 3.1.0
+info:
+  title: Can't Run Alone — Run Scheduling Service API
+  version: 0.1.0
+  description: >-
+    Proposed internal HTTP contract between the API Gateway and Run Scheduling
+    Service. Browsers use the gateway contract, not this service directly.
+    Run Conditions calls and event-broker messages are documented in the
+    accompanying README, not represented as browser-facing endpoints.
+servers:
+  - url: http://run-scheduling-service:8080
+    description: Illustrative Docker Compose service DNS; deploy-specific
+tags:
+  - name: Run conditions
+  - name: Runs
+  - name: Participation
+security:
+  - bearerAuth: []
+paths:
+  /runs/conditions-preview:
+    post:
+      tags: [Run conditions]
+      operationId: previewRunConditions
+      summary: Preview conditions for a proposed run before publishing
+      description: >-
+        Calls the Run Conditions Service for the proposed coordinates and
+        scheduled time. No run is persisted. Alternatives may be returned
+        when conditions are unsuitable or uncertain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ConditionsPreviewInput' }
+      responses:
+        '200':
+          description: Conditions preview
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ConditionsPreview' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+        '503': { $ref: '#/components/responses/ConditionsUnavailable' }
+  /runs:
+    get:
+      tags: [Runs]
+      operationId: browseUpcomingRuns
+      summary: Browse public upcoming runs
+      description: >-
+        Returns public, non-cancelled runs only. The service applies the
+        optional spatial filter; the gateway may enrich results for the UI.
+        Invite-only runs are available only by ID to authorized invitees.
+      parameters:
+        - name: latitude
+          in: query
+          schema: { type: number, minimum: -90, maximum: 90 }
+        - name: longitude
+          in: query
+          schema: { type: number, minimum: -180, maximum: 180 }
+        - name: radiusKm
+          in: query
+          schema: { type: number, exclusiveMinimum: 0, maximum: 50 }
+        - name: from
+          in: query
+          schema: { type: string, format: date-time }
+          description: Inclusive lower bound; defaults to now.
+        - name: limit
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+        - name: cursor
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: Page of upcoming runs
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RunPage' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [Runs]
+      operationId: createRun
+      summary: Schedule a run
+      description: >-
+        The authenticated runner becomes organizer and first participant.
+        Calls Run Conditions before creation and stores a conditions snapshot.
+        On success, publishes RunScheduled through an outbox-backed event.
+        The service checks the organizer's current verification/suspension state.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateRunInput' }
+      responses:
+        '201':
+          description: Run scheduled
+          headers:
+            Location:
+              schema: { type: string }
+              description: Path to the created run.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Run' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+        '503': { $ref: '#/components/responses/ConditionsUnavailable' }
+  /runs/{runId}:
+    parameters:
+      - { $ref: '#/components/parameters/RunId' }
+    get:
+      tags: [Runs]
+      operationId: getRun
+      summary: Get a run
+      description: >-
+        Public runs are visible to authenticated runners; invite-only runs
+        require organizer, participant, or invitee access. Exact meeting-point
+        coordinates are returned only to organizer or joined participants.
+      responses:
+        '200':
+          description: Run detail, with meeting-point visibility applied
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Run' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      tags: [Runs]
+      operationId: updateRun
+      summary: Update a scheduled run
+      description: >-
+        Organizer only. Changes to time or meeting point trigger a new
+        conditions check; successful changes publish RunChanged.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateRunInput' }
+      responses:
+        '200':
+          description: Updated run
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Run' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+        '503': { $ref: '#/components/responses/ConditionsUnavailable' }
+  /runs/{runId}/cancellation:
+    put:
+      tags: [Runs]
+      operationId: cancelRun
+      summary: Cancel a run
+      description: >-
+        Organizer only. Idempotent: repeated cancellation returns the
+        cancelled run and does not publish duplicate RunCancelled events.
+      parameters:
+        - { $ref: '#/components/parameters/RunId' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CancelRunInput' }
+      responses:
+        '200':
+          description: Cancelled run
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Run' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /runs/{runId}/participants/me:
+    parameters:
+      - { $ref: '#/components/parameters/RunId' }
+    put:
+      tags: [Participation]
+      operationId: joinRun
+      summary: Join a run as the authenticated runner
+      description: >-
+        Idempotent for an existing participant. Checks run capacity, status,
+        visibility, and current runner eligibility. Organizer is already joined.
+      responses:
+        '200':
+          description: Joined or already participating
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Participation' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+    delete:
+      tags: [Participation]
+      operationId: leaveRun
+      summary: Leave a run as the authenticated runner
+      description: >-
+        Idempotent. Organizers must cancel the run rather than leave it.
+      responses:
+        '204': { description: Left or was not participating; no response body }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Gateway-validated runner token forwarded to this service.
+  parameters:
+    RunId:
+      name: runId
+      in: path
+      required: true
+      schema: { type: string }
+  responses:
+    BadRequest: { description: Invalid query or cursor, content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
+    Unauthorized: { description: Missing or invalid token, content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
+    Forbidden: { description: Authenticated runner is not allowed, content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
+    NotFound: { description: Run not found, content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
+    Conflict: { description: State conflict such as full or ended run, content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
+    ValidationError: { description: Invalid run input, content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
+    ConditionsUnavailable: { description: Run Conditions Service unavailable and no acceptable cached conditions, content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
+  schemas:
+    ApiError:
+      type: object
+      additionalProperties: false
+      required: [code, message, correlationId]
+      properties:
+        code: { type: string, example: RUN_FULL }
+        message: { type: string }
+        fieldErrors: { type: object, additionalProperties: { type: string } }
+        correlationId: { type: string }
+    Coordinates:
+      type: object
+      additionalProperties: false
+      required: [latitude, longitude]
+      properties:
+        latitude: { type: number, minimum: -90, maximum: 90 }
+        longitude: { type: number, minimum: -180, maximum: 180 }
+    ConditionsPreviewInput:
+      type: object
+      additionalProperties: false
+      required: [location, startsAt]
+      properties:
+        location: { $ref: '#/components/schemas/Coordinates' }
+        startsAt: { type: string, format: date-time, description: ISO 8601 timestamp with timezone offset. }
+    Conditions:
+      type: object
+      additionalProperties: false
+      required: [temperatureC, humidityPercent, rainChancePercent, pm25MicrogramsM3, suitability, checkedAt, stale]
+      properties:
+        temperatureC: { type: number }
+        humidityPercent: { type: integer, minimum: 0, maximum: 100 }
+        rainChancePercent: { type: integer, minimum: 0, maximum: 100 }
+        pm25MicrogramsM3: { type: number, minimum: 0 }
+        suitability: { type: string, enum: [good, caution, avoid] }
+        checkedAt: { type: string, format: date-time }
+        stale: { type: boolean }
+    AlternativeSlot:
+      type: object
+      additionalProperties: false
+      required: [startsAt, conditions]
+      properties:
+        startsAt: { type: string, format: date-time }
+        conditions: { $ref: '#/components/schemas/Conditions' }
+    ConditionsPreview:
+      type: object
+      additionalProperties: false
+      required: [conditions, alternatives]
+      properties:
+        conditions: { $ref: '#/components/schemas/Conditions' }
+        alternatives:
+          type: array
+          items: { $ref: '#/components/schemas/AlternativeSlot' }
+    CreateRunInput:
+      type: object
+      additionalProperties: false
+      required: [title, meetingPoint, location, startsAt, distanceKm, pace, participantLimit, visibility]
+      properties:
+        title: { type: string, minLength: 1, maxLength: 120 }
+        meetingPoint: { type: string, minLength: 1, maxLength: 200 }
+        location: { $ref: '#/components/schemas/Coordinates' }
+        startsAt: { type: string, format: date-time, description: ISO 8601 timestamp with timezone offset. }
+        distanceKm: { type: number, exclusiveMinimum: 0, maximum: 50 }
+        pace: { type: string, description: 'Target min/km range; e.g. 6:00–6:30.' }
+        participantLimit: { type: integer, minimum: 2, maximum: 30 }
+        visibility: { type: string, enum: [public, invite_only] }
+    UpdateRunInput:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        title: { type: string, minLength: 1, maxLength: 120 }
+        meetingPoint: { type: string, minLength: 1, maxLength: 200 }
+        location: { $ref: '#/components/schemas/Coordinates' }
+        startsAt: { type: string, format: date-time }
+        distanceKm: { type: number, exclusiveMinimum: 0, maximum: 50 }
+        pace: { type: string }
+        participantLimit: { type: integer, minimum: 2, maximum: 30 }
+        visibility: { type: string, enum: [public, invite_only] }
+    CancelRunInput:
+      type: object
+      additionalProperties: false
+      required: [reason]
+      properties:
+        reason: { type: string, minLength: 1, maxLength: 240 }
+    Run:
+      type: object
+      additionalProperties: false
+      required: [id, organizerId, title, area, startsAt, distanceKm, pace, participantLimit, participantCount, visibility, status, joined, conditions, createdAt, updatedAt]
+      properties:
+        id: { type: string }
+        organizerId: { type: string }
+        title: { type: string }
+        area: { type: string, description: Coarse public area used for discovery. }
+        meetingPoint: { type: string, description: Exact name; present only for organizer or joined participant. }
+        location: { $ref: '#/components/schemas/Coordinates' }
+        startsAt: { type: string, format: date-time }
+        distanceKm: { type: number }
+        pace: { type: string }
+        participantLimit: { type: integer }
+        participantCount: { type: integer }
+        visibility: { type: string, enum: [public, invite_only] }
+        status: { type: string, enum: [scheduled, cancelled, ended] }
+        joined: { type: boolean }
+        conditions: { $ref: '#/components/schemas/Conditions' }
+        cancellationReason: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    RunPage:
+      type: object
+      additionalProperties: false
+      required: [items]
+      properties:
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/Run' }
+        nextCursor: { type: string }
+    Participation:
+      type: object
+      additionalProperties: false
+      required: [runId, runnerId, joined]
+      properties:
+        runId: { type: string }
+        runnerId: { type: string }
+        joined: { type: boolean, const: true }
