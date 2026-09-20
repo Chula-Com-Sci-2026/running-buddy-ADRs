@@ -40,6 +40,19 @@ adr generate toc
 - One ADR per pull request, reviewed by the team before merge.
 - Each ADR references the architectural driver / NFR it addresses.
 
+### Decision log
+
+| Repo ADR | Decision | Source decision | Status |
+| --- | --- | --- | --- |
+| [0001](docs/adr/0001-record-architecture-decisions.md) | Record architecture decisions | Repo setup | Accepted |
+| [0002](docs/adr/0002-database-selection-and-geospatial-indexing.md) | Database and geospatial indexing | Deliverable 1 ADR-001 | Accepted |
+| [0003](docs/adr/0003-frontend-framework-and-ui-styling.md) | Frontend framework and styling | Deliverable 1 ADR-002 | Accepted |
+| [0004](docs/adr/0004-authentication-phone-verification-and-authorization.md) | Authentication and authorization | Deliverable 1 ADR-003 | Accepted |
+| [0005](docs/adr/0005-service-boundaries-and-data-ownership.md) | Service boundaries and data ownership | Deliverable 2 | Proposed |
+| [0006](docs/adr/0006-service-collaboration-and-provider-isolation.md) | Service collaboration and provider isolation | Deliverable 2 | Proposed |
+
+Repository numbers continue after the existing ADR-0001; the Deliverable 1 numbers are source-document labels.
+
 ## Getting started
 
-_Local run instructions to be added once the service structure is decided (see ADR-0002)._
+_Local run instructions will be added with the service implementation (see proposed ADR-0005)._
