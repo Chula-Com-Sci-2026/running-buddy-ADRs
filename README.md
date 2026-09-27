@@ -50,6 +50,7 @@ adr generate toc
 | [0004](docs/adr/0004-authentication-phone-verification-and-authorization.md) | Authentication and authorization | Deliverable 1 ADR-003 | Accepted |
 | [0005](docs/adr/0005-service-boundaries-and-data-ownership.md) | Service boundaries and data ownership | Deliverable 2 | Proposed |
 | [0006](docs/adr/0006-service-collaboration-and-provider-isolation.md) | Service collaboration and provider isolation | Deliverable 2 | Proposed |
+| [0007](docs/adr/0007-backend-language-and-framework.md) | Backend stack for discovery, reputation, and trust services | Implementation planning | Proposed |
 
 Repository numbers continue after the existing ADR-0001; the Deliverable 1 numbers are source-document labels.
 
