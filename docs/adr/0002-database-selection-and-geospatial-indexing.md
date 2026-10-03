@@ -4,7 +4,11 @@ Date: 2026-09-20
 
 ## Status
 
-Accepted
+Superseded by [15. Give each service its own PostgreSQL database](0015-give-each-service-its-own-postgresql-database.md)
+
+Superseded by [16. Search nearby runners and runs with PostGIS on coarsened cells](0016-search-nearby-runners-and-runs-with-postgis-on-coarsened-cells.md)
+
+Superseded by [17. Cache weather and air quality in Redis](0017-cache-weather-and-air-quality-in-redis.md)
 
 ## Context
 

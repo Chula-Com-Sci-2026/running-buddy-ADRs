@@ -4,7 +4,11 @@ Date: 2026-09-20
 
 ## Status
 
-Accepted
+Superseded by [9. Build the web client as a React single-page application](0009-build-the-web-client-as-a-react-single-page-application.md)
+
+Superseded by [10. Style the web client with Tailwind CSS](0010-style-the-web-client-with-tailwind-css.md)
+
+Superseded by [11. Render maps with Leaflet and OpenStreetMap tiles](0011-render-maps-with-leaflet-and-openstreetmap-tiles.md)
 
 ## Context
 

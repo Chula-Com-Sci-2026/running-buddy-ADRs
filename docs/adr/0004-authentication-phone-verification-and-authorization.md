@@ -4,7 +4,11 @@ Date: 2026-09-20
 
 ## Status
 
-Accepted
+Superseded by [12. Verify phone ownership with SMS one-time passwords](0012-verify-phone-ownership-with-sms-one-time-passwords.md)
+
+Superseded by [13. Authenticate with short-lived JWTs and rotating refresh tokens](0013-authenticate-with-short-lived-jwts-and-rotating-refresh-tokens.md)
+
+Superseded by [14. Authorize every request in the service that owns it](0014-authorize-every-request-in-the-service-that-owns-it.md)
 
 ## Context
 
