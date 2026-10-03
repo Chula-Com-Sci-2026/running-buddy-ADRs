@@ -6,9 +6,11 @@ Date: 2026-09-20
 
 Proposed
 
+Amended by [19. Call services over REST until the phase 2 event broker](0019-call-services-over-rest-until-the-phase-2-event-broker.md)
+
 ## Context
 
-Weather-provider failure must leave scheduling usable with a visibly stale cached forecast (NFR-3.2), and failures in weather or notification must not cascade into profile, matching, or scheduling (NFR-3.3). External providers must be replaceable behind adapters (NFR-7.2). Deliverable 2 lists direct calls for run conditions and account locking, plus broker events for changes that other services consume.
+Weather-provider failure must leave scheduling usable with a visibly stale cached forecast (NFR-3.2), and failures in weather or notification must not cascade into profile, matching, or scheduling (NFR-3.3). External providers must be replaceable behind adapters. Deliverable 2 lists direct calls for run conditions and account locking, plus broker events for changes that other services consume.
 
 ## Decision
 
@@ -34,4 +36,4 @@ Reputation also consumes `RunCancelled` to record late cancellations. Deliverabl
 - Synchronous Run Conditions calls need a timeout and cached fallback so a provider outage does not block scheduling. The maximum usable cache age still needs a policy decision.
 - Broker operations and event schema versioning add complexity. The draft Run Scheduling API contract is not an implemented event contract.
 
-Source: Deliverable 2, “Microservice Design with Collaborations,” service collaborations; Deliverable 1, NFR-3.2, NFR-3.3, and NFR-7.2.
+Source: Deliverable 2, “Microservice Design with Collaborations,” service collaborations; Deliverable 1, NFR-3.2 and NFR-3.3.

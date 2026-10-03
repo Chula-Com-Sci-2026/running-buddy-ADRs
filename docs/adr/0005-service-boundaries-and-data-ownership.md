@@ -6,9 +6,11 @@ Date: 2026-09-20
 
 Proposed
 
+Amended by [18. Build phase 1 with six services](0018-build-phase-1-with-six-services.md)
+
 ## Context
 
-Independent deployment and exclusive data ownership are architectural drivers (NFR-7.1, NFR-7.3). Deliverable 2 divides the product by responsibility and lists each service's data store and collaborators. The repo currently contains a draft Run Scheduling API contract, but no service implementation.
+Independent scaling and isolated failures are architectural drivers (NFR-2.3, NFR-3.3), and [8. Use a microservices architecture](0008-use-a-microservices-architecture.md) gives each service exclusive ownership of its data. Deliverable 2 divides the product by responsibility and lists each service's data store and collaborators. The repo currently contains a draft Run Scheduling API contract, but no service implementation.
 
 ## Decision
 
@@ -32,6 +34,6 @@ Each service owns its schema and writes only its own store. Other services recei
 - Services can evolve and deploy independently, but distributed flows need explicit contracts and failure handling.
 - Candidate, verification, rating, and contact projections can lag behind their sources; consumers must handle stale or duplicate updates.
 - Eight services create substantial operational and contract-testing work for a semester project. The team should review whether all boundaries need separate deployables in the first implementation.
-- Exact location and public-profile rules need consistent enforcement across Discovery, Profile, and Run Scheduling (NFR-5.1).
+- Exact location and public-profile rules need consistent enforcement across Discovery, Profile, and Run Scheduling (NFR-4.1).
 
-Source: Deliverable 2, “Microservice Design with Collaborations,” service table; Deliverable 1, NFR-7.1 and NFR-7.3.
+Source: Deliverable 2, “Microservice Design with Collaborations,” service table; Deliverable 1, NFR-2.3 and NFR-3.3.
