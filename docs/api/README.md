@@ -1,6 +1,6 @@
 # Run Scheduling Service contract (draft)
 
-[run-scheduling.openapi.yaml](run-scheduling.openapi.yaml) is the **internal service contract** for the Run Scheduling Service in the project's `microservice-design-arch.md`. The React app does not call this service. It calls the API Gateway using the separate `cant-run-alone-frontend/docs/api/frontend-gateway.openapi.yaml` contract; the gateway authenticates/routes requests and adapts the response for the UI.
+[run-scheduling.openapi.yaml](run-scheduling.openapi.yaml) is the **internal service contract** for the Run Scheduling Service in the [microservice architecture](../architecture/README.md). The React app does not call this service. It calls the API Gateway using the separate `cant-run-alone-frontend/docs/api/frontend-gateway.openapi.yaml` contract; the gateway authenticates/routes requests and adapts the response for the UI.
 
 ## Gateway-to-service mapping
 
@@ -38,7 +38,7 @@ The service returns `201 Created`, a `Location: /runs/{runId}` header, and a `Ru
 
 ## Collaborations outside this OpenAPI file
 
-The Run Scheduling Service calls Run Conditions Service (`getRunConditions`, and `suggestAlternativeSlots` for unsuitable/uncertain previews). Its HTTP/gRPC wire contract belongs to that service, not this one. The service also publishes `RunScheduled`, `RunChanged`, `RunCancelled`, `ReminderDue`, `ForecastChanged`, and `RunEnded`; it consumes `RunnerVerified`, `VerificationRejected`, and `AccountSuspended`. Scheduled jobs send reminders, recheck forecasts, end runs, and update runner status. These are **not public HTTP operations** and should be described with an event contract (for example AsyncAPI) if the team implements them. Use an outbox and idempotent consumers so DB updates and event delivery remain consistent.
+The Run Scheduling Service calls Run Conditions Service (`getRunConditions`, and `suggestAlternativeSlots` for unsuitable/uncertain previews). Its HTTP/gRPC wire contract belongs to that service, not this one. The service also publishes `RunScheduled`, `RunChanged`, `RunCancelled`, `ReminderDue`, `ForecastChanged`, and `RunEnded`; it consumes `RunnerVerified`, `VerificationRejected`, and `AccountSuspended`. Scheduled jobs send reminders, recheck forecasts, end runs, and update runner status. In phase 1 these events are REST POSTs to each subscriber's internal events endpoint, not Kafka messages ([ADR-0019](../adr/0019-call-services-over-rest-until-the-phase-2-event-broker.md)), and `RunEnded` waits for phase 2 with Reputation. These are **not public HTTP operations** and should be described with an event contract (for example AsyncAPI) if the team implements them. Use an outbox and idempotent consumers so DB updates and event delivery remain consistent.
 
 ## Decisions for team review
 
