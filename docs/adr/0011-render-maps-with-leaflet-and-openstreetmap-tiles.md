@@ -29,4 +29,4 @@ We will render maps with Leaflet and OpenStreetMap-based tiles, behind a thin ma
 - The map bundle must still be lazy-loaded to protect NFR-1.4.
 - Public OpenStreetMap tile servers have usage limits; production needs a tile provider whose terms fit the expected traffic, a follow-on choice.
 
-Source: Deliverable 1, "Frontend Framework and UI Styling," split so the map library is its own decision.
+Source: Deliverable 1 (revised), "ADR-002: Frontend Framework and UI Styling," split so the map library is its own decision.

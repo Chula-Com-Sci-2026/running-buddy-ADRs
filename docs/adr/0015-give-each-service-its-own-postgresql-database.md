@@ -33,4 +33,4 @@ We will give each service that stores data its own logical PostgreSQL 16 databas
 - If all logical databases share one PostgreSQL instance, that instance is a single point of failure for every service; the deployment decision must give it a standby or accept the risk against NFR-3.1.
 - Schema changes need migrations. If profile attributes change much faster than expected, `jsonb` columns can absorb the variation.
 
-Source: Deliverable 1, "Database Selection and Geospatial Indexing," split per review feedback into one ADR per data need.
+Source: Deliverable 1 (revised), "ADR-004: Database Selection and Geospatial Indexing," split per review feedback into one ADR per data need.

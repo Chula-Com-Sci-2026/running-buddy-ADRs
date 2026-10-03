@@ -30,4 +30,4 @@ We will cache weather and air-quality readings in Redis, owned by the Run Condit
 - Losing Redis degrades the weather display until the cache refills, but never removes a run's attached forecast.
 - Follow-on decisions: the fresh period, the stale retention period, and the cell and time-bucket sizes.
 
-Source: Deliverable 1, "Database Selection and Geospatial Indexing," split per review feedback into one ADR per data need.
+Source: Deliverable 1 (revised), "ADR-004: Database Selection and Geospatial Indexing," split per review feedback into one ADR per data need.

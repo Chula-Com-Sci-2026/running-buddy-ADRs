@@ -37,4 +37,4 @@ We will style the web client with Tailwind CSS, with the colors, spacing, and br
 - Visual consistency depends on using the config tokens rather than arbitrary values; code review should reject one-off values.
 - Moving away later means restyling every component, so this is costly to reverse once many screens exist.
 
-Source: Deliverable 1, "Frontend Framework and UI Styling," split per review feedback; this ADR adds the styling options that the original Context did not weigh.
+Source: Deliverable 1 (revised), "ADR-002: Frontend Framework and UI Styling," split per review feedback; this ADR adds the styling options that the original Context did not weigh.

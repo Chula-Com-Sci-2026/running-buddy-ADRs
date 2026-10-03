@@ -36,4 +36,4 @@ We will run both radius searches with PostGIS and GiST indexes: in Discovery DB 
 - Run Scheduling must hide an invite-only run's meeting point from runners who are not invited.
 - Follow-on decision: the cell scheme (for example a geohash or H3 grid) and its size.
 
-Source: Deliverable 1, "Database Selection and Geospatial Indexing," and the location-privacy rule from "Authentication, Phone Verification, and Zero Trust Authorization," split per review feedback into one ADR per data need.
+Source: Deliverable 1 (revised), "ADR-004: Database Selection and Geospatial Indexing," and the location-privacy rule from "ADR-003: Authentication, Phone Verification, and Zero Trust Authorization," split per review feedback into one ADR per data need.

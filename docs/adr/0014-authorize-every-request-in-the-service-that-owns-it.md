@@ -32,4 +32,4 @@ We will authorize every request in the service that owns the operation. The gate
 - Rules that depend on another service's data, such as "verified runners only", use a local copy of that data, which can lag behind its source.
 - Automated tests should check that each endpoint rejects callers without permission (NFR-5.6).
 
-Source: Deliverable 1, "Authentication, Phone Verification, and Zero Trust Authorization," split per review feedback so authentication and authorization are separate decisions.
+Source: Deliverable 1 (revised), "ADR-003: Authentication, Phone Verification, and Zero Trust Authorization," split per review feedback so authentication and authorization are separate decisions.

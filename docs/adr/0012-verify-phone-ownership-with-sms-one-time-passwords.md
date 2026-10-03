@@ -38,4 +38,4 @@ In phase 1 the phone-verified fact is the badge. From phase 2, Trust & Safety gr
 - The provider sits behind an adapter, so it can be swapped without touching domain logic, and an outage degrades registration only.
 - Follow-on decisions: the one-time password lifetime and rate-limit values, and whether a runner whose badge an admin rejected can earn it again.
 
-Source: Deliverable 1, "Authentication, Phone Verification, and Zero Trust Authorization," split per review feedback so each ADR weighs one set of options.
+Source: Deliverable 1 (revised), "ADR-003: Authentication, Phone Verification, and Zero Trust Authorization," split per review feedback so each ADR weighs one set of options.

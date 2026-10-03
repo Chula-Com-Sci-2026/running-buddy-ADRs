@@ -32,4 +32,4 @@ We will issue JWT access tokens that expire after 15 minutes, signed by the Iden
 - A refresh token that is reused after rotation signals theft, and Identity should revoke the whole chain.
 - Follow-on decision: where the web client keeps tokens, for example the refresh token in an HttpOnly cookie and the access token in memory.
 
-Source: Deliverable 1, "Authentication, Phone Verification, and Zero Trust Authorization," split per review feedback so authentication and authorization are separate decisions.
+Source: Deliverable 1 (revised), "ADR-003: Authentication, Phone Verification, and Zero Trust Authorization," split per review feedback so authentication and authorization are separate decisions.

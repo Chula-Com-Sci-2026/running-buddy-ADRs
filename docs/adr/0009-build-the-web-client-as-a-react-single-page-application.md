@@ -28,10 +28,10 @@ We will build the web client as a React and TypeScript single-page application, 
 ## Consequences
 
 - The team is productive immediately; no framework learning curve consumes project time.
-- TypeScript types generated from the gateway's OpenAPI contract catch integration mistakes at compile time.
+- TypeScript types generated from the gateway's OpenAPI contract catch integration mistakes at compile time and support the contract tests (NFR-7.2).
 - Meeting NFR-1.4 requires route-level code splitting and lazy-loading the map bundle; first paint must be measured, not assumed.
 - Authenticated screens get no SEO. A small static landing page can be added separately if public discoverability is ever needed.
 - If server rendering becomes necessary, moving a React SPA to Next.js is a well-trodden path, so this decision is reversible at moderate cost.
 - Follow-on decision: where the client stores tokens (see [13. Authenticate with short-lived JWTs and rotating refresh tokens](0013-authenticate-with-short-lived-jwts-and-rotating-refresh-tokens.md)).
 
-Source: Deliverable 1, "Frontend Framework and UI Styling," split per review feedback so the framework and styling decisions each have their own options.
+Source: Deliverable 1 (revised), "ADR-002: Frontend Framework and UI Styling," split per review feedback so the framework and styling decisions each have their own options.
