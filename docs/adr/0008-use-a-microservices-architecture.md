@@ -24,11 +24,11 @@ The service boundaries are in [5. Service boundaries and data ownership](0005-se
 
 ## Consequences
 
-- Weather and notification failures stay inside their own services, and Buddy Discovery and Run Scheduling can scale for the peaks without scaling the rest.
-- Team members can each own one or two services.
+- Weather and notification failures stay inside their own services (NFR-3.3), and Buddy Discovery and Run Scheduling can scale for the peaks without scaling the rest (NFR-2.2, NFR-2.3).
+- Team members can each own one or two services, and contract tests catch breaking API changes before they are merged (NFR-7.2).
 - There are no ACID transactions across services, so each business rule must live inside one service. Effects that cross services, such as a profile change reaching search results, are eventually consistent.
-- The team pays for several deployables, a gateway, and later a broker. One shared service template and one Docker Compose file keep that cost down, and phase 1 postpones the broker ([19. Call services over REST until the phase 2 event broker](0019-call-services-over-rest-until-the-phase-2-event-broker.md)).
-- Following one request across services needs correlation IDs and central logs.
+- The team pays for several deployables, a gateway, and later a broker. One shared service template and one Docker Compose file that starts the whole stack (NFR-7.3) keep that cost down, and phase 1 postpones the broker ([19. Call services over REST until the phase 2 event broker](0019-call-services-over-rest-until-the-phase-2-event-broker.md)).
+- Following one request across services needs correlation IDs and central logs (NFR-7.4).
 - Boundaries drawn this early may be wrong. If two services keep changing together, merge them rather than keep coordinating their releases.
 - Follow-on decisions: the service list, the collaboration style, one database per service ([15. Give each service its own PostgreSQL database](0015-give-each-service-its-own-postgresql-database.md)), and the production platform.
 

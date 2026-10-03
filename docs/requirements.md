@@ -412,3 +412,9 @@ Note: phase 1 delivers notifications in-app only; email notifications follow in 
 - NFR-6.4 The system shall use Bangkok local time (ICT, UTC+7) as the default timezone for all scheduled runs.
 - NFR-6.5 The system shall comply with Thailand's Computer-Related Crime Act B.E. 2550 (2007) as amended in B.E. 2560 (2017), including keeping computer traffic data for at least 90 days, and with the Personal Data Protection Act B.E. 2562 (2019) (see NFR-4.3).
 - NFR-6.6 The system shall back up profile, run, and rating data daily.
+
+**NFR-7 Testability & Observability**
+- NFR-7.1 Domain logic shall have at least 70% unit test coverage.
+- NFR-7.2 Contract tests shall run between services on every pull request.
+- NFR-7.3 The full stack shall be startable locally with a single command.
+- NFR-7.4 Every request shall carry a correlation ID that is passed between services and written to every log line, and the logs of all services shall be searchable in one place.

@@ -8,7 +8,7 @@ Proposed
 
 ## Context
 
-The Buddy Discovery, Reputation, and Trust & Safety services need implementations. Buddy Discovery is built in phase 1; Reputation and Trust & Safety follow in phase 2 ([18. Build phase 1 with six services](0018-build-phase-1-with-six-services.md)). The team wants the full stack to start locally with one command and domain logic covered by unit tests. Because the system uses independently deployable microservices, this decision should not constrain the API Gateway or other services.
+The Buddy Discovery, Reputation, and Trust & Safety services need implementations. Buddy Discovery is built in phase 1; Reputation and Trust & Safety follow in phase 2 ([18. Build phase 1 with six services](0018-build-phase-1-with-six-services.md)). The team wants the full stack to start locally with one command (NFR-7.3) and domain logic covered by unit tests (NFR-7.1). Because the system uses independently deployable microservices, this decision should not constrain the API Gateway or other services.
 
 What the architecture asks of these three services:
 
@@ -34,7 +34,7 @@ The API Gateway and all other services are explicitly outside this decision and 
 - A consistent language simplifies their local setup, reviews, testing, observability, and shared authentication middleware.
 - Phase 1 needs no gRPC or Kafka libraries in Rails. Phase 2 adds a Kafka client to all three and a gRPC client to Trust & Safety.
 - Ruby gRPC calls are blocking, so Trust & Safety must set a deadline on `lockAccount()` and keep retrying in the background rather than hold a request open. The expected course workload does not justify Rust primarily for throughput.
-- Rails processes generally use more memory and provide fewer compile-time guarantees than Rust; contract tests, static analysis, validation, and disciplined boundaries are therefore important.
+- Rails processes generally use more memory and provide fewer compile-time guarantees than Rust; contract tests (NFR-7.2), static analysis, validation, and disciplined boundaries are therefore important.
 - Rust remains a valid future choice for a measured performance bottleneck, but mixing stacks now would increase operational and learning cost.
 - Polyglot services add build and operational variation, but language-neutral contracts keep that variation behind service boundaries.
 
