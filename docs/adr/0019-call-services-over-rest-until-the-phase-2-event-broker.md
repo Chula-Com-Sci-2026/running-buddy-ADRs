@@ -8,6 +8,8 @@ Accepted
 
 Amends [6. Service collaboration and provider isolation](0006-service-collaboration-and-provider-isolation.md)
 
+Partially superseded for local buddy-notification broker delivery by [ADR-0021](0021-rabbitmq-for-local-domain-event-delivery.md). Other synchronous REST collaborations remain.
+
 ## Context
 
 In the target design every fact that other services react to travels through Kafka ([6. Service collaboration and provider isolation](0006-service-collaboration-and-provider-isolation.md)). Review feedback (as of 2026-10) suggests leaving a full event broker as follow-on work, and the course brief allows a first version that uses REST only; the final deliverable must still show REST, gRPC, and asynchronous messaging. Phase 1 has six services ([18. Build phase 1 with six services](0018-build-phase-1-with-six-services.md)) and only these facts cross a service boundary:

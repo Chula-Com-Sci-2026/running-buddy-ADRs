@@ -8,6 +8,8 @@ Accepted
 
 Supersedes [4. Authentication, phone verification, and authorization](0004-authentication-phone-verification-and-authorization.md)
 
+Locally refined by [ADR-0026](0026-session-management.md) for browser session storage and refresh lifecycle. Its public-key validation assumption is partially superseded locally by [ADR-0022](0022-service-authorization-for-the-local-stack.md); its Argon2id assumption is partially superseded for team Identity by [ADR-0023](0023-bcrypt-for-team-identity-credentials.md).
+
 ## Context
 
 Runners sign in with email and password (FR-1.1, FR-1.2); passwords are stored with Argon2id (NFR-5.2). After sign-in, every request to the gateway and to each service must prove who the caller is (NFR-5.3). Access tokens must expire within 15 minutes and refresh tokens must rotate on use (NFR-5.4). Services must scale horizontally (NFR-2.3), so checking a caller should not mean a call to Identity on every request. When an account is suspended or deleted, its access must end quickly.

@@ -8,6 +8,8 @@ Accepted
 
 Supersedes [4. Authentication, phone verification, and authorization](0004-authentication-phone-verification-and-authorization.md)
 
+Refined for implemented local permissions by [ADR-0022](0022-service-authorization-for-the-local-stack.md).
+
 ## Context
 
 Every endpoint except registration, one-time-password verification, login, and password reset must authorize its caller, and no endpoint may trust a call just because it came from inside the cluster (NFR-5.3). Most rules are about ownership of data that only one service holds: only a run's organizer may edit or cancel it, an invite-only run is visible only to its invitees, only the candidate may answer a buddy request, and only verified runners may create runs. Some calls have no user behind them, such as the scheduled forecast re-check and service-to-service pushes. The course guidance is to authenticate at the gateway and check business-rule permissions in the service that owns the operation, rather than wiring an identity service to every other service.
