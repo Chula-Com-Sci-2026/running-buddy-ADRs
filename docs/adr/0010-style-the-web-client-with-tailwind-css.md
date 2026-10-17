@@ -8,6 +8,8 @@ Accepted
 
 Supersedes [3. Frontend framework and UI styling](0003-frontend-framework-and-ui-styling.md)
 
+Superseded for the primary styling approach in the local Deliverable 4 client by [ADR-0025](0025-ui-styling.md). The original decision remains the historical team baseline.
+
 ## Context
 
 The React single-page application ([9. Build the web client as a React single-page application](0009-build-the-web-client-as-a-react-single-page-application.md)) needs a styling approach. The forces:
