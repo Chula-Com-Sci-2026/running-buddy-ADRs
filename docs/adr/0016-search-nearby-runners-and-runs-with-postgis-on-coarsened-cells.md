@@ -8,6 +8,8 @@ Accepted
 
 Supersedes [2. Database selection and geospatial indexing](0002-database-selection-and-geospatial-indexing.md)
 
+[ADR-0030](0030-area-cells-on-a-0-01-degree-grid.md) settles its cell scheme and size: a grid of 0.01° in latitude and longitude.
+
 ## Context
 
 Two use cases are radius searches combined with other filters:
