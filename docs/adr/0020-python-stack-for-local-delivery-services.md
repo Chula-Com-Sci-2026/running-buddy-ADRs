@@ -6,6 +6,8 @@ Date: 2026-10-16
 
 Accepted for the local Deliverable 4 implementation, under the project owner's delegated approval. Teammates may supply replacements behind the same contracts.
 
+Partially superseded for Profile by [ADR-0027](0027-typescript-for-the-profile-service.md).
+
 ## Context
 
 Profile, Run Conditions, Run Scheduling, Notification and the gateway need local implementations; a Python Identity implementation also exists as a fallback. Discovery and Reputation already use Rails and must retain their working histories. The driver is completing the three business flows with independently replaceable services. Extending Rails everywhere provides consistency but adds framework setup; FastAPI provides typed validation and generated OpenAPI with a smaller implementation surface, at the cost of a second runtime and duplicated infrastructure helpers.
