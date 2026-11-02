@@ -10,6 +10,8 @@ Supersedes [3. Frontend framework and UI styling](0003-frontend-framework-and-ui
 
 Reaffirmed for the local Deliverable 4 client by [ADR-0024](0024-frontend-framework.md); the framework choice is unchanged.
 
+[ADR-0029](0029-object-storage-for-profile-photos.md) makes an exception for photo files: the browser sends and loads them directly from storage, not through the API gateway.
+
 ## Context
 
 The product is web first; native mobile apps are out of scope, so the browser client must work well on a phone and on desktop (NFR-6.1, NFR-6.2), with first contentful paint under 3 s on 5G (NFR-1.4). The interface is map-heavy and interactive: pinning a meeting point, a nearby-runs map, and discovery filters that update as the runner changes them. Almost every screen is behind login. The team's existing frontend experience is in React.
