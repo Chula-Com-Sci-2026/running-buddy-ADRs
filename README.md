@@ -5,11 +5,41 @@ point, and plan around the weather. Term project for **2110521 Software Architec
 
 ## Documentation
 
-- **Requirements:** [`docs/requirements.md`](docs/requirements.md)
-- **Microservice architecture:** [`docs/architecture/`](docs/architecture/) (target design and phase 1 scope)
-- **Architecture Decision Records:** [`docs/adr/`](docs/adr/)
-- **Run Scheduling Service API (draft):** [`docs/api/run-scheduling.openapi.yaml`](docs/api/run-scheduling.openapi.yaml)
-- **Repo setup handoff:** [`docs/REPO-SETUP-HANDOFF.md`](docs/REPO-SETUP-HANDOFF.md)
+### Architecture (final presentation, Part 1)
+
+| Document | What it covers |
+| --- | --- |
+| [Requirements](docs/requirements.md) | Use cases, functional and non-functional requirements (NFR IDs used everywhere else) |
+| [Goals, constraints and key decisions](docs/architecture/goals-and-constraints.md) | Architectural drivers and the ADRs that answer them |
+| [C4 Level 1: System context](docs/architecture/c4-level-1-system-context.md) | Users and external systems |
+| [C4 Level 2: Containers](docs/architecture/c4-level-2-container.md) | As-built services, databases, broker and protocols; changes since the Deliverable 2 design |
+| [Sequence: buddy request](docs/architecture/sequence-buddy-request.md) | Gateway → gRPC → outbox → RabbitMQ → notification |
+| [Deployment overview](docs/architecture/deployment.md) | k3s and Docker Compose deployments, service discovery |
+| [Deliverable 2 target design](docs/architecture/README.md) | Original microservice design, operations and collaborators, phase 1 scope |
+
+### Quality and risk (final presentation, Part 2)
+
+| Document | What it covers |
+| --- | --- |
+| [Risk matrix](docs/risk-matrix.md) | Six measured risks scored by likelihood × impact, with mitigations |
+| [Quality attribute: resilience](docs/quality-attribute-resilience.md) | Pod-replacement scenario: 12,000 of 12,000 requests succeeded |
+| [Load tests (k6)](https://github.com/Chula-Com-Sci-2026/running-buddy-integration/blob/main/load-tests/README.md) | Scenarios, NFR targets, measured results and bottlenecks |
+
+### Deployment process
+
+| Document | What it covers |
+| --- | --- |
+| [Kubernetes (k3s) deployment](https://github.com/Chula-Com-Sci-2026/running-buddy-integration/blob/main/k8s/README.md) | Cluster, image build, secrets, migrations, seed, checks; service-discovery measurements |
+| [Docker Compose stack](https://github.com/Chula-Com-Sci-2026/running-buddy-integration/blob/main/README.md) | Live-demo startup, seed accounts, business flows, database evidence |
+
+### Decisions and contracts
+
+| Document | What it covers |
+| --- | --- |
+| [Architecture Decision Records](docs/adr/) | Numbered ADRs; decision log below |
+| [Service and gateway contracts](https://github.com/Chula-Com-Sci-2026/running-buddy-contracts) | OpenAPI files, the Discovery protobuf and event schemas |
+| [Run Scheduling API (draft)](docs/api/run-scheduling.openapi.yaml) | Early draft contract |
+| [Repo setup handoff](docs/REPO-SETUP-HANDOFF.md) | How this repository was created |
 
 ## Architecture Decision Records (ADRs)
 
@@ -82,4 +112,4 @@ Local acceptance is authorized by the project owner and does not claim teammate 
 
 ## Getting started
 
-See the sibling [local integration repository](../local-integration/README.md) for the implemented Deliverable 4 stack, startup and verification commands.
+See the [integration repository](https://github.com/Chula-Com-Sci-2026/running-buddy-integration) for the implemented stack, startup and verification commands. Each service has its own repository under [Chula-Com-Sci-2026](https://github.com/Chula-Com-Sci-2026).

@@ -1,6 +1,21 @@
 # Microservice architecture
 
-Can't Run Alone is built as microservices ([ADR-0008](../adr/0008-use-a-microservices-architecture.md)): one service per bounded context, each owning its data, behind one API gateway. This folder holds the Deliverable 2 design (the target architecture) and the smaller first phase the team builds first.
+Can't Run Alone is built as microservices ([ADR-0008](../adr/0008-use-a-microservices-architecture.md)): one service per bounded context, each owning its data, behind one API gateway. This folder holds the as-built architecture views and the Deliverable 2 design (the target architecture).
+
+## As built (final presentation)
+
+| File | What it is |
+| --- | --- |
+| [goals-and-constraints.md](goals-and-constraints.md) | Architectural goals, constraints and key decisions |
+| [c4-level-1-system-context.md](c4-level-1-system-context.md) | C4 Level 1: users and external systems |
+| [c4-level-2-container.md](c4-level-2-container.md) | C4 Level 2: services, databases, broker and protocols as built |
+| [sequence-buddy-request.md](sequence-buddy-request.md) | Sequence diagram for the buddy request scenario |
+| [deployment.md](deployment.md) | Deployment overview and service discovery |
+| [images/](images/) | PNG exports of the diagrams above, for slides |
+
+## Deliverable 2 design (target)
+
+The rest of this page describes the design submitted for Deliverable 2. Where the build differs, [c4-level-2-container.md](c4-level-2-container.md) lists the changes.
 
 | File | What it is |
 | --- | --- |
@@ -11,13 +26,13 @@ Can't Run Alone is built as microservices ([ADR-0008](../adr/0008-use-a-microser
 
 Arrow convention, in every diagram here: **A → B means A starts the call.** Responses are not drawn.
 
-## Target architecture
+### Target architecture
 
 Eight services, an API gateway, and a Kafka event broker. Buddy Discovery and Run Conditions (red outline) are the core domain.
 
 ![Target microservice architecture](microservice-architecture.png)
 
-## Phase 1 scope
+### Phase 1 scope
 
 Review feedback on Deliverable 2 found the design complete but large, and recommended finishing buddy search, run creation, and the weather check first. Phase 1 therefore builds six services ([ADR-0018](../adr/0018-build-phase-1-with-six-services.md)) and delivers events over REST instead of Kafka ([ADR-0019](../adr/0019-call-services-over-rest-until-the-phase-2-event-broker.md)). It completes UC-02 Find a Compatible Running Buddy and UC-03 Schedule a Run with Weather Check.
 
