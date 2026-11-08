@@ -28,8 +28,9 @@ flowchart LR
                 dh["Headless Service<br/>discovery-headless:50051"]
                 disc["Deployment discovery<br/>gRPC, 30 s max connection age"]
                 workers["Worker Deployments<br/>discovery-outbox, notification-worker,<br/>identity-worker"]
-                jobs["Jobs<br/>db-bootstrap, migrations"]
+                jobs["Jobs<br/>db-bootstrap, migrations,<br/>profile bucket and broker user"]
                 pg[("StatefulSet postgres<br/>PVC 5 Gi")]
+                photos[("StatefulSet profile-storage (MinIO)<br/>PVC 1 Gi, NodePort 30091")]
                 redis[("StatefulSet redis (AOF)<br/>PVC 1 Gi")]
                 mq[("StatefulSet rabbitmq<br/>PVC 1 Gi")]
                 cfg["ConfigMap service-endpoints<br/>Secret cra-secrets"]
@@ -43,6 +44,7 @@ flowchart LR
     apps --> pg
     disc --> pg
     apps -->|"conditions only"| redis
+    apps -->|"profile only"| photos
     workers --> mq
     workers --> pg
     jobs -->|"before any Deployment"| pg
@@ -55,7 +57,8 @@ flowchart LR
 | redis (AOF) | StatefulSet | `redis:6379` | PVC 1 Gi |
 | rabbitmq | StatefulSet | `rabbitmq:5672`, `:15672` | PVC 1 Gi |
 | identity (team) + identity-worker | Deployment | `identity:5000` | none |
-| profile, scheduling, conditions, notification (+ worker) | Deployment | `<name>:8000` | none |
+| profile-storage (MinIO) | StatefulSet | `profile-storage:9000`, NodePort `30091` | PVC 1 Gi |
+| profile (team, TypeScript), scheduling, conditions, notification (team, FastAPI) (+ worker) | Deployment | `<name>:8000` | none |
 | discovery + discovery-outbox | Deployment | `discovery:50051`, `discovery-headless:50051` | none |
 | reputation | Deployment | `reputation:3000` | none |
 | gateway | Deployment | `gateway:8000`, NodePort `30090` | none |

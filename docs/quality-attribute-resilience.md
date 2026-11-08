@@ -15,7 +15,7 @@ The measurable quality attribute we demonstrate: **the system keeps serving requ
 
 ## Result
 
-Measured with `k8s/scripts/replacement-demo.sh` on 31 Oct 2026, six runs, each 2,000 requests to `GET /api/v1/me/profile`:
+Measured with `k8s/scripts/replacement-demo.sh` on 31 Oct 2026, six runs, each 2,000 requests to `GET /api/v1/me/profile`. These runs used the Python Profile; since 8 Nov 2026 Profile is the team TypeScript service, so re-run the scenario before presenting it as a measurement of the current Profile:
 
 | Run | Succeeded | Failed | p50 | p95 | Max |
 | --- | ---: | ---: | ---: | ---: | ---: |

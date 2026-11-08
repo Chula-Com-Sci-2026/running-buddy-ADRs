@@ -16,12 +16,12 @@ flowchart LR
         subgraph services["Domain services"]
             direction TB
             identity["<b>Identity</b><br/>[Node.js, Express]<br/>Accounts, OTP, sessions"]
-            profile["<b>Profile</b><br/>[Python]<br/>Runner profiles, search"]
+            profile["<b>Profile</b><br/>[TypeScript, Hono]<br/>Runner profiles, search"]
             discovery["<b>Buddy Discovery</b><br/>[Rails, gRPC]<br/>Candidates, buddy requests"]
             scheduling["<b>Run Scheduling</b><br/>[Python]<br/>Runs, membership, attendance"]
             conditions["<b>Run Conditions</b><br/>[Python]<br/>Weather and air quality"]
             reputation["<b>Reputation</b><br/>[Rails]<br/>Ratings, running records"]
-            notification["<b>Notification</b><br/>[Python]<br/>In-app notifications"]
+            notification["<b>Notification</b><br/>[Python, FastAPI]<br/>Inbox, preferences"]
             trust["<b>Trust &amp; Safety</b><br/>[Python]<br/>Reports, badges, suspensions"]
         end
 
@@ -35,6 +35,7 @@ flowchart LR
 
         mq[("<b>RabbitMQ</b><br/>[Message broker]<br/>topic exchange cra.events")]
         redis[("<b>Redis</b><br/>[NoSQL key-value, AOF]<br/>Weather cache")]
+        photos[("<b>Profile photo storage</b><br/>[MinIO, S3 API]")]
         pg[("<b>PostgreSQL 16</b><br/>[RDBMS]<br/>One database and role per service")]
     end
 
@@ -60,6 +61,8 @@ flowchart LR
     outbox -.->|"publish BuddyRequestSent / Answered"| mq
     mq -.->|"consume"| nworker
     tworker -.->|"publish / consume"| mq
+    profile -.->|"publish ProfileUpdated (outbox)"| mq
+    profile --> photos
     identity -.->|"email job"| mq
     mq -.->|"identity.email.v1"| iworker
 
@@ -72,7 +75,7 @@ flowchart LR
     classDef ext fill:#999999,stroke:#6b6b6b,color:#ffffff
     class runner person
     class spa,gw,identity,profile,discovery,scheduling,conditions,reputation,notification,trust,outbox,nworker,tworker,iworker container
-    class mq,redis,pg store
+    class mq,redis,pg,photos store
     class weather ext
 ```
 
@@ -84,7 +87,7 @@ Solid arrows are synchronous calls; the thick arrow is the gRPC call; dotted arr
 | --- | --- |
 | REST service | Reputation, Profile, Run Scheduling, Run Conditions, Notification, Trust &amp; Safety, Identity |
 | gRPC service | Buddy Discovery (`buddy_discovery.v1`, port 50051) |
-| Message broker service | RabbitMQ: Discovery outbox → Notification worker; Trust &amp; Safety; Identity email worker |
+| Message broker service | RabbitMQ: Discovery outbox → Notification worker; Profile publishes `ProfileUpdated`; Trust &amp; Safety; Identity email worker |
 | API gateway | API Gateway / BFF (the only container the browser calls) |
 | RDBMS | PostgreSQL, one database and owning role per service ([0015](../adr/0015-give-each-service-its-own-postgresql-database.md)) |
 | NoSQL | Redis key-value store for weather and air quality, persisted with AOF ([0017](../adr/0017-cache-weather-and-air-quality-in-redis.md)) |
@@ -96,7 +99,8 @@ Solid arrows are synchronous calls; the thick arrow is the gRPC call; dotted arr
 
 - **Buddy Discovery is the gRPC service.** The design gave Discovery a REST API and Run Conditions and Identity gRPC APIs. In the build, the gateway calls Discovery over gRPC, and Conditions and Identity are REST.
 - **RabbitMQ, not Kafka.** Domain events go through RabbitMQ with a transactional outbox ([0021](../adr/0021-rabbitmq-for-local-domain-event-delivery.md)).
-- **Discovery reads Profile through its API.** There is no replicated candidate read model yet.
+- **Discovery reads Profile through its API.** Profile already publishes `ProfileUpdated`, but Discovery does not consume it into its own read model yet.
+- **Profile and Notification are the team implementations** (since 8 Nov 2026): Profile in TypeScript with photo storage in MinIO, Notification in FastAPI with per-category preferences.
 - **No admin console and no email/SMS delivery.** Moderation is an API used by configured moderator accounts; OTPs and emails go to a console adapter.
 
 ## Deployment notes
