@@ -43,4 +43,4 @@ With 2 Discovery pods at 10 requests/s, deleting the busiest pod gave **749 of 7
 
 ## Limits
 
-Single node and single VM: this shows instance-level resilience, not node or zone failure, and it does not establish the 99% uptime of NFR-3.1. The raw run folders (`load-tests/results/<run>/`) stay on the test machine and are not committed; the method and the first run's numbers are in [`running-buddy-integration/k8s/README.md`](https://github.com/Chula-Com-Sci-2026/running-buddy-integration/blob/main/k8s/README.md).
+Single node and single VM: this shows instance-level resilience, not node or zone failure, and it does not establish the 99% uptime of NFR-3.1. Raw evidence for every run (probe log, timeline, pod events, DNS and endpoints before and after) is in [`running-buddy-integration/load-tests/results/`](https://github.com/Chula-Com-Sci-2026/running-buddy-integration/tree/main/load-tests/results), one folder per run ID above; the method is in [`k8s/README.md`](https://github.com/Chula-Com-Sci-2026/running-buddy-integration/blob/main/k8s/README.md).
