@@ -10,6 +10,7 @@ Can't Run Alone is built as microservices ([ADR-0008](../adr/0008-use-a-microser
 | [c4-level-1-system-context.md](c4-level-1-system-context.md) | C4 Level 1: users and external systems |
 | [c4-level-2-container.md](c4-level-2-container.md) | C4 Level 2: services, databases, broker and protocols as built |
 | [sequence-buddy-request.md](sequence-buddy-request.md) | Sequence diagram for the buddy request scenario |
+| [sequence-profile-photo-upload.md](sequence-profile-photo-upload.md) | Sequence diagram for uploading a profile photo by signed URL |
 | [deployment.md](deployment.md) | Deployment overview and service discovery |
 | [images/](images/) | PNG exports of the diagrams above, for slides |
 

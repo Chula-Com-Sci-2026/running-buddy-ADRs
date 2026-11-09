@@ -62,7 +62,8 @@ flowchart LR
     mq -.->|"consume"| nworker
     tworker -.->|"publish / consume"| mq
     profile -.->|"publish ProfileUpdated (outbox)"| mq
-    profile --> photos
+    profile -->|"S3 API: sign upload, check, delete"| photos
+    spa -->|"HTTPS PUT photo (signed URL), GET photo"| photos
     identity -.->|"email job"| mq
     mq -.->|"identity.email.v1"| iworker
 
@@ -81,6 +82,8 @@ flowchart LR
 
 Solid arrows are synchronous calls; the thick arrow is the gRPC call; dotted arrows are asynchronous messages through the broker.
 
+The Web App → photo storage arrow is the one place the browser talks to something other than the gateway. Profile signs a short-lived upload URL (5 minutes) for one object key, so the image bytes go straight to storage and never pass through the gateway or Profile; the bucket is read-only to the public, so `photoUrl` loads in an `<img>` without a token. See [`sequence-profile-photo-upload.md`](sequence-profile-photo-upload.md).
+
 ## How the course requirements map to containers
 
 | Requirement | Container |
@@ -88,7 +91,7 @@ Solid arrows are synchronous calls; the thick arrow is the gRPC call; dotted arr
 | REST service | Reputation, Profile, Run Scheduling, Run Conditions, Notification, Trust &amp; Safety, Identity |
 | gRPC service | Buddy Discovery (`buddy_discovery.v1`, port 50051) |
 | Message broker service | RabbitMQ: Discovery outbox → Notification worker; Profile publishes `ProfileUpdated`; Trust &amp; Safety; Identity email worker |
-| API gateway | API Gateway / BFF (the only container the browser calls) |
+| API gateway | API Gateway / BFF (the only container the browser calls for APIs; photo bytes go to storage by signed URL) |
 | RDBMS | PostgreSQL, one database and owning role per service ([0015](../adr/0015-give-each-service-its-own-postgresql-database.md)) |
 | NoSQL | Redis key-value store for weather and air quality, persisted with AOF ([0017](../adr/0017-cache-weather-and-air-quality-in-redis.md)) |
 | Service discovery | Platform DNS: Compose service names, Kubernetes Services + CoreDNS (see [`deployment.md`](deployment.md)) |
