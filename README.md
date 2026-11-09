@@ -14,6 +14,7 @@ point, and plan around the weather. Term project for **2110521 Software Architec
 | [C4 Level 1: System context](docs/architecture/c4-level-1-system-context.md) | Users and external systems |
 | [C4 Level 2: Containers](docs/architecture/c4-level-2-container.md) | As-built services, databases, broker and protocols; changes since the Deliverable 2 design |
 | [Sequence: buddy request](docs/architecture/sequence-buddy-request.md) | Gateway → gRPC → outbox → RabbitMQ → notification |
+| [Sequence: profile photo upload](docs/architecture/sequence-profile-photo-upload.md) | Signed upload URL → browser PUTs to MinIO → attach |
 | [Deployment overview](docs/architecture/deployment.md) | k3s and Docker Compose deployments, service discovery |
 | [Deliverable 2 target design](docs/architecture/README.md) | Original microservice design, operations and collaborators, phase 1 scope |
 
