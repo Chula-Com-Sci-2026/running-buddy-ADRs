@@ -35,4 +35,5 @@ flowchart TB
 
 - A runner can act as an **organizer** (creates a run) or a **participant** (joins one); both are the same account.
 - Map tiles are loaded by the browser directly from OpenStreetMap, not through the system ([0011](../adr/0011-render-maps-with-leaflet-and-openstreetmap-tiles.md)).
+- The browser also asks OpenStreetMap's Nominatim service for the place name at a meeting-point pin. It is the same external provider as the tiles, limited to one request a second, and the organizer can edit the name.
 - The email/SMS provider is replaced by a clearly labeled console adapter in the local deployment; no real SMS is sent.
